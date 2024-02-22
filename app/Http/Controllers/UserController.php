@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -13,7 +15,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        return "Listado de usuarios";
+        $users = User::all();
+
+        return response()->json([
+            'data' => $users
+        ], 200);
     }
 
     /**
@@ -30,12 +36,13 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($user): UserResource
     {
-        //
+        $user = User::find($user);
+        return UserResource::make($user);
     }
 
     /**

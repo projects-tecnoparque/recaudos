@@ -32,6 +32,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime'
+    ];
+
     public function tipoDocumento(): BelongsTo
     {
         return $this->belongsTo(DocumentType::class, 'document_type_id', 'id');

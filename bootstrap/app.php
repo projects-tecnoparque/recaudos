@@ -60,7 +60,9 @@ $app->singleton(
 */
 
 $app->configure('app');
+
 config(['app.locale' => 'es']);
+config(['app.faker_locale' => 'es_ES']);
 
 
 /*

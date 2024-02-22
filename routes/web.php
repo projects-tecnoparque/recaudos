@@ -14,8 +14,8 @@
 */
 
 $router->get('/', function () use ($router) {
-    return config('app.locale');
     return $router->app->version();
 });
 
 $router->get('/users', 'UserController@index');
+$router->get('/users/{user}', 'UserController@show');
