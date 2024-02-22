@@ -14,6 +14,7 @@
 */
 
 $router->get('/', function () use ($router) {
+    return config('app.locale');
     return $router->app->version();
 });
 
