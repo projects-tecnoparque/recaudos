@@ -17,5 +17,6 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/users', 'UserController@index');
-$router->get('/users/{user}', 'UserController@show');
+$router->get('/usuarios', 'UserController@index');
+$router->get('/usuarios/{user}', 'UserController@show');
+$router->get('/tipos-documentos/{id}', 'DocumentTypeController@show');
