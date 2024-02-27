@@ -8,7 +8,7 @@ class CreateDocumentTypeTest extends TestCase
 {
     use DatabaseMigrations;
     /** @test */
-    public function can_create_articles()
+    public function can_create_document_types()
     {
         $response = $this->json('POST', '/tipos-documentos', [
             'data' => [
@@ -17,6 +17,9 @@ class CreateDocumentTypeTest extends TestCase
                     'abreviatura' => 'CC',
                     'nombre' => 'Cedula de ciudadadania',
                 ],
+            ],
+            [
+                'accept' => 'application/vnd.api+json'
             ]
         ]);
 

@@ -27,7 +27,6 @@ class DocumentTypeController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $documentType = DocumentType::create([
             'abbreviation' => $request->input('data.attributes.abreviatura'),
             'name' =>  $request->input('data.attributes.nombre')
