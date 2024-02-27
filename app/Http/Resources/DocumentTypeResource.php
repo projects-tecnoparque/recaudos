@@ -27,10 +27,10 @@ class DocumentTypeResource extends JsonResource
         ];
     }
 
-    public function toResponse($request)
-    {
-        return parent::toResponse($request)->withHeaders([
-            'Location' => url('/tipos-documentos/' . $this->resource->getRouteKey())
-        ]);
-    }
+    // public function toResponse($request)
+    // {
+    //     return parent::toResponse($request)->withHeaders([
+    //         'Location' => url('/tipos-documentos/' . $this->resource->getRouteKey())
+    //     ]);
+    // }
 }

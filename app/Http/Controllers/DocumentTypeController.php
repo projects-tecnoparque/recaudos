@@ -25,8 +25,13 @@ class DocumentTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): DocumentTypeResource
     {
+        $this->validate($request, [
+            'data.attributes.abreviatura' => 'required',
+            'data.attributes.nombre' => 'required',
+        ]);
+        
         $documentType = DocumentType::create([
             'abbreviation' => $request->input('data.attributes.abreviatura'),
             'name' =>  $request->input('data.attributes.nombre')
@@ -44,6 +49,7 @@ class DocumentTypeController extends Controller
     public function show($id): DocumentTypeResource
     {
         $documentType = DocumentType::findOrFail($id);
+        // dd($documentType);
         return DocumentTypeResource::make($documentType);
     }
 
