@@ -13,10 +13,18 @@
 |
 */
 
+$router->get('test_route', [
+    'middleware' => 'validate-headers-json',
+    'uses' => 'UserController@index'
+]);
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
 $router->get('/usuarios', 'UserController@index');
-$router->get('/usuarios/{user}', 'UserController@show');
+$router->get('/usuarios/{id}', 'UserController@show');
+
+$router->get('/tipos-documentos', 'DocumentTypeController@index');
+$router->post('/tipos-documentos', 'DocumentTypeController@store');
 $router->get('/tipos-documentos/{id}', 'DocumentTypeController@show');

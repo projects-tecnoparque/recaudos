@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DocumentTypeCollection;
+use App\Http\Resources\DocumentTypeResource;
 use App\Models\DocumentType;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,9 @@ class DocumentTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): DocumentTypeCollection
     {
-        //
+        return DocumentTypeCollection::make(DocumentType::all());
     }
 
     /**
@@ -25,7 +27,13 @@ class DocumentTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        $documentType = DocumentType::create([
+            'abbreviation' => $request->input('data.attributes.abreviatura'),
+            'name' =>  $request->input('data.attributes.nombre')
+        ]);
+
+        return DocumentTypeResource::make($documentType);
     }
 
     /**
@@ -34,22 +42,10 @@ class DocumentTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): DocumentTypeResource
     {
-        $documentType = DocumentType::find($id);
-        return response()->json([
-            'data' => [
-                'type' => 'TipoDocumentos',
-                'id' => $documentType->getRouteKey(),
-                'attributes' => [
-                    'abreviatura' => $documentType->abbreviation,
-                    'nombre' => $documentType->name,
-                ],
-                'links' => [
-                    'self' => url('/tipos-documentos/'.$documentType->getRouteKey())
-                ]
-            ]
-        ]);
+        $documentType = DocumentType::findOrFail($id);
+        return DocumentTypeResource::make($documentType);
     }
 
     /**

@@ -39,9 +39,9 @@ class UserController extends Controller
      * @param  int  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($user): UserResource
+    public function show($id): UserResource
     {
-        $user = User::find($user);
+        $user = User::find($id);
         return UserResource::make($user);
     }
 

@@ -80,9 +80,12 @@ config(['app.faker_locale' => 'es_ES']);
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    // 'auth' => App\Http\Middleware\Authenticate::class,
+    'validate-headers-json' => App\Http\Middleware\ValidateJsonApiHeaders::class,
+]);
+
+
 
 /*
 |--------------------------------------------------------------------------
