@@ -14,18 +14,20 @@
 */
 
 $router->get('/', function () use ($router) {
-    return "<center>Recaudos</center>";
+    return "<center>". config('app.name'). "</center>";
 });
 
 $router->get('/version', function () use ($router) {
     return $router->app->version();
 });
 
-
 $router->post('login', 'AuthController@login');
-$router->post('logout', 'AuthController@logout');
-$router->post('refresh', 'AuthController@refresh');
-$router->post('user-profile', 'AuthController@me');
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->post('logout', 'AuthController@logout');
+    $router->post('refresh', 'AuthController@refresh');
+    $router->post('user-profile', 'AuthController@me');
+});
+
 
 $router->get('/usuarios', 'UserController@index');
 $router->get('/usuarios/{id}', 'UserController@show');

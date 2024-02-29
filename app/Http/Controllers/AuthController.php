@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use  App\Models\User;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -17,7 +17,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth', ['except' => ['login']]);
     }
     /**
      * Get a JWT via given credentials.
@@ -27,7 +27,6 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // dd($request->all());
         $this->validate($request, [
             'email' => 'required|string',
             'password' => 'required|string',
@@ -35,14 +34,14 @@ class AuthController extends Controller
 
         $credentials = $request->only(['email', 'password']);
 
-        if (! $token = Auth::attempt($credentials)) {
+        if (!$token = Auth::attempt($credentials)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         return $this->respondWithToken($token);
     }
 
-     /**
+    /**
      * Get the authenticated User.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -84,10 +83,12 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'user' => auth()->user(),
-            'expires_in' => auth()->factory()->getTTL() * 60 * 24
+            // 'data' => [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'user' => UserResource::make(auth()->user()),
+                'expires_in' => auth()->factory()->getTTL() * 60 * 24
+            // ]
         ]);
     }
 }
