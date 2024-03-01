@@ -4,38 +4,34 @@ use App\Models\DocumentType;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class CreateDocumentTypeTest extends TestCase
+class UpdateDocumentTypeTest extends TestCase
 {
     use DatabaseMigrations;
+
     /** @test */
-    public function can_create_document_types()
+    public function can_updated_document_types()
     {
-        $response = $this->json('POST', '/tipos-documentos', [
+        $documentType = DocumentType::factory()->create();
+        $response = $this->json('PUT', '/tipos-documentos/'.$documentType->getRouteKey() , [
             'data' => [
                 'type' => 'TipoDocumentos',
                 'attributes' => [
-                    'abreviatura' => 'CC',
-                    'nombre' => 'Cedula de ciudadadania',
+                    'abreviatura' => 'UCC',
+                    'nombre' => 'update documento ciudadania',
                 ],
             ]
         ]);
 
-        $response->seeStatusCode(201);
+        $response->seeStatusCode(200);
 
-        $documentType = DocumentType::first();
-
-        // $response->seeHeader(
-        //     'Location',
-        //     url('/tipos-documentos/' . $documentType->getRouteKey())
-        // );
 
         $response->seeJson([
             'data' => [
                 'type' => 'TipoDocumentos',
                 'id' => (string) $documentType->getRouteKey(),
                 'attributes' => [
-                    'abreviatura' => 'CC',
-                    'nombre' => 'Cedula de ciudadadania',
+                    'abreviatura' => 'UCC',
+                    'nombre' => 'update documento ciudadania',
                 ],
                 'links' => [
                     'self' => url('/tipos-documentos/' . $documentType->getRouteKey())
@@ -47,7 +43,8 @@ class CreateDocumentTypeTest extends TestCase
     /** @test */
     public function abreviature_is_required()
     {
-        $response = $this->json('POST', '/tipos-documentos', [
+        $documentType = DocumentType::factory()->create();
+        $response = $this->json('PUT', '/tipos-documentos'.$documentType->getRouteKey(), [
             'data' => [
                 'attributes' => [
                     'nombre' => 'Cedula de ciudadadania',
@@ -66,7 +63,8 @@ class CreateDocumentTypeTest extends TestCase
 
     public function name_is_required()
     {
-        $response = $this->json('POST', '/tipos-documentos', [
+        $documentType = DocumentType::factory()->create();
+        $response = $this->json('PUT', '/tipos-documentos'.$documentType->getRouteKey(), [
             'data' => [
                 'attributes' => [
                     'abreviatura' => 'CC',

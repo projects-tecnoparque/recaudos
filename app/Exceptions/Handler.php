@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
+
+use App\Http\Responses\JsonApiValidationErrorResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -60,11 +63,17 @@ class Handler extends ExceptionHandler
             return response()->json((['status' => 405, 'message' => 'Method Not Allowed']), 405);
         }
 
+        if ($exception instanceof HttpException) {
+            return response()->json((['status' => 400, 'message' => $exception->getMessage()]), 400);
+        }
         if ($exception instanceof NotFoundHttpException) {
             return response()->json((['status' => 404, 'message' => 'The requested resource was not found']), 404);
         }
         if ($exception instanceof ModelNotFoundException) {
             return response()->json((['status' => 404, 'message' => $exception->getMessage()]), 404);
+        }
+        if ($exception instanceof QueryException) {
+            return response()->json((['status' => 500, 'message' => $exception->getMessage()]), 500);
         }
         if ($exception instanceof ValidationException) {
             return $this->invalidJson($request, $exception);
@@ -72,19 +81,8 @@ class Handler extends ExceptionHandler
         return parent::render($request, $exception);
     }
 
-    protected function invalidJson($request, ValidationException $exception)
+    protected function invalidJson($request, ValidationException $exception): JsonApiValidationErrorResponse
     {
-        $title = $exception->getMessage();
-        return response()->json([
-            'errors' => collect($exception->errors())->map(function($message, $field) use($title) {
-                return [
-                    'title' => $title,
-                    'detail' => $message[0],
-                    'source' => [
-                        'pointer' => "/" . str_replace('.', '/', $field)
-                    ]
-                ];
-            })->values()
-        ], 422);
+        return new JsonApiValidationErrorResponse($exception);
     }
 }

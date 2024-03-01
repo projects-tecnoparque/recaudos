@@ -13,10 +13,6 @@
 |
 */
 
-$router->get('test_route', [
-    // 'middleware' => 'validate-headers-json',
-    'uses' => 'UserController@index'
-]);
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
@@ -30,4 +26,7 @@ $router->post('/tipos-documentos', [
     // 'middleware' => 'validate-headers-json',
     'uses' => 'DocumentTypeController@store'
 ]);
+
 $router->get('/tipos-documentos/{id}', 'DocumentTypeController@show');
+$router->put('/tipos-documentos/{id}', 'DocumentTypeController@update');
+$router->delete('/tipos-documentos/{id}', 'DocumentTypeController@destroy');

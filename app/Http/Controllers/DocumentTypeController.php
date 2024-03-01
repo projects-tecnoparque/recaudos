@@ -5,33 +5,41 @@ namespace App\Http\Controllers;
 use App\Http\Resources\DocumentTypeCollection;
 use App\Http\Resources\DocumentTypeResource;
 use App\Models\DocumentType;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class DocumentTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index(): DocumentTypeCollection
     {
-        return DocumentTypeCollection::make(DocumentType::all());
+        $documentTypes = DocumentType::allowedSorts(['name', 'abbreviation']);
+
+        return DocumentTypeCollection::make(
+            $documentTypes->paginate(
+                $perPage = request('page.size', 15),
+                $columns = ['*'],
+                $pageName = 'page[number]',
+                $page = request('page.number', 1)
+            )->appends(request()->only('sort','page.size'))
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return Response
      */
     public function store(Request $request): DocumentTypeResource
     {
-        $this->validate($request, [
-            'data.attributes.abreviatura' => 'required',
-            'data.attributes.nombre' => 'required',
-        ]);
-        
+        $this->saveDocumentTypeRequest($request);
+
         $documentType = DocumentType::create([
             'abbreviation' => $request->input('data.attributes.abreviatura'),
             'name' =>  $request->input('data.attributes.nombre')
@@ -44,35 +52,53 @@ class DocumentTypeController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id): DocumentTypeResource
     {
         $documentType = DocumentType::findOrFail($id);
-        // dd($documentType);
         return DocumentTypeResource::make($documentType);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): DocumentTypeResource
     {
-        //
+        $documentType = DocumentType::findOrFail($id);
+
+        $this->saveDocumentTypeRequest($request);
+
+        $documentType->update([
+            'abbreviation' => $request->input('data.attributes.abreviatura'),
+            'name' =>  $request->input('data.attributes.nombre')
+        ]);
+
+        return DocumentTypeResource::make($documentType);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function destroy($id)
+    public function destroy($id): Response
     {
-        //
+        $documentType = DocumentType::findOrFail($id);
+        $documentType->delete();
+        return response(null, 204);
+    }
+
+    protected function saveDocumentTypeRequest(Request $request): void
+    {
+        $this->validate($request, [
+            'data.attributes.abreviatura' => 'required|alpha_num|min:1|max:3|' . Rule::unique('document_types', 'id')->ignore($request->route('id')),
+            'data.attributes.nombre' => 'required|min:1|max:50|' . Rule::unique('document_types', 'id')->ignore($request->route('id')),
+        ]);
     }
 }
