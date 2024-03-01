@@ -14,8 +14,27 @@
 */
 
 $router->get('/', function () use ($router) {
-    return config('app.locale');
+    return "<center>". config('app.name'). "</center>";
+});
+
+$router->get('/version', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/users', 'UserController@index');
+$router->post('login', 'AuthController@login');
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->post('logout', 'AuthController@logout');
+    $router->post('refresh', 'AuthController@refresh');
+    $router->post('user-profile', 'AuthController@me');
+});
+
+
+$router->get('/usuarios', 'UserController@index');
+$router->get('/usuarios/{id}', 'UserController@show');
+
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->get('/tipos-documentos', 'DocumentTypeController@index');
+    $router->post('/tipos-documentos', 'DocumentTypeController@store');
+    $router->get('/tipos-documentos/{id}', 'DocumentTypeController@show');
+});
+
