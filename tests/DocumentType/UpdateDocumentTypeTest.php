@@ -13,13 +13,8 @@ class UpdateDocumentTypeTest extends TestCase
     {
         $documentType = DocumentType::factory()->create();
         $response = $this->json('PUT', '/tipos-documentos/'.$documentType->getRouteKey() , [
-            'data' => [
-                'type' => 'TipoDocumentos',
-                'attributes' => [
-                    'abreviatura' => 'UCC',
-                    'nombre' => 'update documento ciudadania',
-                ],
-            ]
+            'abreviatura' => 'UCC',
+            'nombre' => 'update documento ciudadania',
         ]);
 
         $response->seeStatusCode(200);

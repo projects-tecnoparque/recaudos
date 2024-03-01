@@ -13,20 +13,30 @@
 |
 */
 
-
 $router->get('/', function () use ($router) {
+    return "<center>". config('app.name'). "</center>";
+});
+
+$router->get('/version', function () use ($router) {
     return $router->app->version();
 });
+
+$router->post('login', 'AuthController@login');
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->post('logout', 'AuthController@logout');
+    $router->post('refresh', 'AuthController@refresh');
+    $router->post('user-profile', 'AuthController@me');
+});
+
 
 $router->get('/usuarios', 'UserController@index');
 $router->get('/usuarios/{id}', 'UserController@show');
 
-$router->get('/tipos-documentos', 'DocumentTypeController@index');
-$router->post('/tipos-documentos', [
-    // 'middleware' => 'validate-headers-json',
-    'uses' => 'DocumentTypeController@store'
-]);
+// $router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->get('/tipos-documentos', 'DocumentTypeController@index');
+    $router->post('/tipos-documentos', 'DocumentTypeController@store');
+    $router->get('/tipos-documentos/{id}', 'DocumentTypeController@show');
+    $router->put('/tipos-documentos/{id}', 'DocumentTypeController@update');
+    $router->delete('/tipos-documentos/{id}', 'DocumentTypeController@destroy');
+// });
 
-$router->get('/tipos-documentos/{id}', 'DocumentTypeController@show');
-$router->put('/tipos-documentos/{id}', 'DocumentTypeController@update');
-$router->delete('/tipos-documentos/{id}', 'DocumentTypeController@destroy');

@@ -11,13 +11,8 @@ class CreateDocumentTypeTest extends TestCase
     public function can_create_document_types()
     {
         $response = $this->json('POST', '/tipos-documentos', [
-            'data' => [
-                'type' => 'TipoDocumentos',
-                'attributes' => [
-                    'abreviatura' => 'CC',
-                    'nombre' => 'Cedula de ciudadadania',
-                ],
-            ]
+            'abreviatura' => 'CC',
+            'nombre' => 'Cedula de ciudadadania',
         ]);
 
         $response->seeStatusCode(201);

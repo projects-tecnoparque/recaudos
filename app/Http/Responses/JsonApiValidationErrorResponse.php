@@ -19,6 +19,7 @@ class JsonApiValidationErrorResponse extends JsonResponse
     public function formatJsonApiErrors($exception): array
     {
         $title = $exception->getMessage();
+        // dd($exception);
         return [
             'errors' => collect($exception->errors())->map(function($message, $field) use($title) {
                 return [

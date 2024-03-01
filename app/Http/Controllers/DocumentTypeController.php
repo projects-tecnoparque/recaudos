@@ -38,11 +38,12 @@ class DocumentTypeController extends Controller
      */
     public function store(Request $request): DocumentTypeResource
     {
+
         $this->saveDocumentTypeRequest($request);
 
         $documentType = DocumentType::create([
-            'abbreviation' => $request->input('data.attributes.abreviatura'),
-            'name' =>  $request->input('data.attributes.nombre')
+            'abbreviation' => $request->get('abreviatura'),
+            'name' =>  $request->get('nombre')
         ]);
 
         return DocumentTypeResource::make($documentType);
@@ -74,8 +75,8 @@ class DocumentTypeController extends Controller
         $this->saveDocumentTypeRequest($request);
 
         $documentType->update([
-            'abbreviation' => $request->input('data.attributes.abreviatura'),
-            'name' =>  $request->input('data.attributes.nombre')
+            'abbreviation' => $request->get('abreviatura'),
+            'name' =>  $request->get('nombre')
         ]);
 
         return DocumentTypeResource::make($documentType);
@@ -97,8 +98,8 @@ class DocumentTypeController extends Controller
     protected function saveDocumentTypeRequest(Request $request): void
     {
         $this->validate($request, [
-            'data.attributes.abreviatura' => 'required|alpha_num|min:1|max:3|' . Rule::unique('document_types', 'id')->ignore($request->route('id')),
-            'data.attributes.nombre' => 'required|min:1|max:50|' . Rule::unique('document_types', 'id')->ignore($request->route('id')),
+            'abreviatura' => 'required|alpha_num|min:1|max:3|' . Rule::unique('document_types', 'abbreviation')->ignore($request->route('id')),
+            'nombre' => 'required|min:1|max:50|' . Rule::unique('document_types', 'name')->ignore($request->route('id')),
         ]);
     }
 }
