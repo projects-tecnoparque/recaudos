@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use App\Models\DocumentType;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -10,19 +11,18 @@ class CreateDocumentTypeTest extends TestCase
     /** @test */
     public function can_create_document_types()
     {
-        $response = $this->json('POST', '/tipos-documentos', [
-            'abreviatura' => 'CC',
-            'nombre' => 'Cedula de ciudadadania',
-        ]);
+        // $user = User::factory()->create();
+
+        $response =  $this
+            // ->actingAs($user, 'api')
+            ->json('POST', '/tipos-documentos', [
+                'abreviatura' => 'CC',
+                'nombre' => 'Cedula de ciudadadania',
+            ]);
 
         $response->seeStatusCode(201);
 
         $documentType = DocumentType::first();
-
-        // $response->seeHeader(
-        //     'Location',
-        //     url('/tipos-documentos/' . $documentType->getRouteKey())
-        // );
 
         $response->seeJson([
             'data' => [
@@ -42,7 +42,11 @@ class CreateDocumentTypeTest extends TestCase
     /** @test */
     public function abreviature_is_required()
     {
-        $response = $this->json('POST', '/tipos-documentos', [
+        // $user = User::factory()->create();
+
+        $response =  $this
+        // ->actingAs($user, 'api')
+        ->json('POST', '/tipos-documentos', [
             'data' => [
                 'attributes' => [
                     'nombre' => 'Cedula de ciudadadania',
@@ -61,7 +65,11 @@ class CreateDocumentTypeTest extends TestCase
 
     public function name_is_required()
     {
-        $response = $this->json('POST', '/tipos-documentos', [
+        // $user = User::factory()->create();
+
+        $response =  $this
+        // ->actingAs($user, 'api')
+        ->json('POST', '/tipos-documentos', [
             'data' => [
                 'attributes' => [
                     'abreviatura' => 'CC',

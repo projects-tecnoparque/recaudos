@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\DocumentType;
+use App\Models\User;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -12,7 +13,10 @@ class UpdateDocumentTypeTest extends TestCase
     public function can_updated_document_types()
     {
         $documentType = DocumentType::factory()->create();
-        $response = $this->json('PUT', '/tipos-documentos/'.$documentType->getRouteKey() , [
+        $user = User::factory()->create();
+
+        $response =  $this->actingAs($user)
+        ->json('PUT', '/tipos-documentos/'.$documentType->getRouteKey() , [
             'abreviatura' => 'UCC',
             'nombre' => 'update documento ciudadania',
         ]);
@@ -39,7 +43,10 @@ class UpdateDocumentTypeTest extends TestCase
     public function abreviature_is_required()
     {
         $documentType = DocumentType::factory()->create();
-        $response = $this->json('PUT', '/tipos-documentos'.$documentType->getRouteKey(), [
+        $user = User::factory()->create();
+
+        $response =  $this->actingAs($user)
+        ->json('PUT', '/tipos-documentos'.$documentType->getRouteKey(), [
             'data' => [
                 'attributes' => [
                     'nombre' => 'Cedula de ciudadadania',
@@ -59,7 +66,10 @@ class UpdateDocumentTypeTest extends TestCase
     public function name_is_required()
     {
         $documentType = DocumentType::factory()->create();
-        $response = $this->json('PUT', '/tipos-documentos'.$documentType->getRouteKey(), [
+        $user = User::factory()->create();
+
+        $response =  $this->actingAs($user)
+        ->json('PUT', '/tipos-documentos'.$documentType->getRouteKey(), [
             'data' => [
                 'attributes' => [
                     'abreviatura' => 'CC',

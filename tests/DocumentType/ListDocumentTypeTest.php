@@ -9,11 +9,6 @@ class ListDocumentTypeTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function can_fetch_a_single_document_type()
-    {
-        $this->assertFalse(false);
-    }
-    /** @test */
     // public function can_fetch_a_single_document_type()
     // {
     //     $documentType = DocumentType::factory()->create();

@@ -32,11 +32,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 $router->get('/usuarios', 'UserController@index');
 $router->get('/usuarios/{id}', 'UserController@show');
 
-$router->group(['middleware' => 'auth'], function () use ($router) {
+// $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/tipos-documentos', 'DocumentTypeController@index');
     $router->post('/tipos-documentos', 'DocumentTypeController@store');
     $router->get('/tipos-documentos/{id}', 'DocumentTypeController@show');
     $router->put('/tipos-documentos/{id}', 'DocumentTypeController@update');
     $router->delete('/tipos-documentos/{id}', 'DocumentTypeController@destroy');
-});
+// });
 

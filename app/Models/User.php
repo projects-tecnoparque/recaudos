@@ -16,9 +16,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use Authenticatable, Authorizable, HasFactory, HasRoles;
 
+    protected $guard_name = 'api';
 
     protected $fillable = [
-        'document_type_id', 'document', 'names', 'surnames', 'phone', 'email', 'email_verified_at', 'status'
+        #'code',
+        'document_type_id', 'document', 'names', 'surnames',
+        'email', 'email_verified_at', 'password', 'phone',
+        #'address', 'neighborhood', 'area',
+        'status'
     ];
 
     /**
@@ -39,7 +44,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'email_verified_at' => 'datetime'
     ];
 
-    public function tipoDocumento(): BelongsTo
+    public function documentType(): BelongsTo
     {
         return $this->belongsTo(DocumentType::class, 'document_type_id', 'id');
     }
