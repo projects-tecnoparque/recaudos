@@ -62,6 +62,7 @@ $app->singleton(
 $app->configure('app');
 $app->configure('jwt');
 $app->configure('auth');
+$app->configure('permission');
 
 config(['app.locale' => 'es']);
 config(['app.faker_locale' => 'es_ES']);
@@ -85,6 +86,8 @@ config(['app.faker_locale' => 'es_ES']);
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
+    'permission' => App\Http\Middleware\PermissionMiddleware::class, // cloned from Spatie\Permission\Middleware
+    'role'       => App\Http\Middleware\RoleMiddleware::class,  // cloned from Spatie\Permission\Middleware
 ]);
 
 
@@ -106,6 +109,10 @@ $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\JsonApiServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(Spatie\Permission\PermissionServiceProvider::class);
+
+
+$app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't have this already
 
 /*
 |--------------------------------------------------------------------------
