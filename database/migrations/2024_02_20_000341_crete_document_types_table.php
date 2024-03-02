@@ -11,6 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        /**
+         * Schema tipo documentos.
+         * - id
+         * - abbreviation = abreviatura
+         * - name = nombre
+         * - created at
+         * - updated at
+         */
         Schema::create('document_types', function (Blueprint $table) {
             $table->id();
             $table->char('abbreviation', 3)->unique();

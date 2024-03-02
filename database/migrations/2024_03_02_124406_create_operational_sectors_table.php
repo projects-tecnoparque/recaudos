@@ -12,20 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         /**
-         * Schema estado productos.
+         * Schema sectores operacionales.
          * - id
-         * - name = nombre producto
-         * - description = descripcion
+         * - code = codigo
+         * - name = nombre
          * - created at
          * - updated at
          */
-        Schema::create('product_statuses', function (Blueprint $table) {
+        Schema::create('operational_sectors', function (Blueprint $table) {
             $table->id();
+            $table->string('code', 20)->unique();
             $table->string('name', 50)->unique();
-            $table->string('description', 500)->nullable();
             $table->timestamps();
 
-            $table->index('name');
+            $table->index(['code', 'name']);
         });
     }
 
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_statuses');
+        Schema::dropIfExists('operational_sectors');
     }
 };

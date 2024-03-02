@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         /**
-         * Schema estado productos.
+         * Schema categorias.
          * - id
-         * - name = nombre producto
+         * - name = nombre
          * - description = descripcion
          * - created at
          * - updated at
          */
-        Schema::create('product_statuses', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->unique();
-            $table->string('description', 500)->nullable();
+            $table->string('name', 100)->unique();
+            $table->text('description')->nullable();
             $table->timestamps();
 
             $table->index('name');
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_statuses');
+        Schema::dropIfExists('categories');
     }
 };

@@ -12,20 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         /**
-         * Schema estado productos.
+         * Schema ciclos.
          * - id
-         * - name = nombre producto
-         * - description = descripcion
+         * - city_id = ciudad id -> foreing to cities
+         * - code = codigo
+         * - name = nombre
          * - created at
          * - updated at
          */
-        Schema::create('product_statuses', function (Blueprint $table) {
+        Schema::create('cycles', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->unique();
-            $table->string('description', 500)->nullable();
+            $table->unsignedBigInteger('city_id');
+            $table->string('code', 20)->unique();
+            $table->string('name', 60);
             $table->timestamps();
 
-            $table->index('name');
+            $table->foreign('city_id')->references('id')->on('cities');
+
+            $table->index(['code', 'name']);
         });
     }
 
@@ -34,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_statuses');
+        Schema::dropIfExists('cycles');
     }
 };

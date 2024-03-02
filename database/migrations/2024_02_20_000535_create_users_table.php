@@ -12,6 +12,21 @@ return new class extends Migration
      */
     public function up(): void
     {
+        /**
+         * Schema usuarios.
+         * - id
+         * - document_type_id = tipo documento id -> foreing to document_types
+         * - names = nombres
+         * - surnames = apellidos
+         * - phone = telefono
+         * - email = correo
+         * - email_verified_at = fecha verificacion correo
+         * - password = contrasena
+         * - remember_token = recordar token
+         * - status = estado -> acceso al sistema
+         * - created at
+         * - updated at
+         */
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('document_type_id');

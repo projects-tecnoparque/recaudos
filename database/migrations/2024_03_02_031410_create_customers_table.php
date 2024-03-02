@@ -11,6 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+        /**
+         * Schema clientes.
+         * - id
+         * - user_id = user id -> foreing to users
+         * - code = codigo cliente
+         * - address = direccion
+         * - neighborhood = barrio
+         * - area = area
+         * - created at
+         * - updated at
+         */
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
