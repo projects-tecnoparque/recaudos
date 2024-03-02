@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
@@ -19,10 +20,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $guard_name = 'api';
 
     protected $fillable = [
-        #'code',
         'document_type_id', 'document', 'names', 'surnames',
         'email', 'email_verified_at', 'password', 'phone',
-        #'address', 'neighborhood', 'area',
         'status'
     ];
 
@@ -43,6 +42,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $casts = [
         'email_verified_at' => 'datetime'
     ];
+
+    /**
+     * Get the customer associated with the user.
+     */
+    public function customer(): HasOne
+    {
+        return $this->hasOne(Customer::class);
+    }
 
     public function documentType(): BelongsTo
     {

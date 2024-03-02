@@ -8,7 +8,8 @@ use App\Contracts\Enums\Label;
 enum RoleEnum: string implements ArrayValues, Label
 {
     case ADMINISTRADOR = "Administrador";
-    case COBRADOR   = "Cobrador";
+    case RECAUDADOR   = "Recaudador";
+    case CLIENTE   = "Cliente";
 
     public static function values(): array
     {
@@ -19,7 +20,8 @@ enum RoleEnum: string implements ArrayValues, Label
     {
         return match ($this) {
             static::ADMINISTRADOR   => 'Administrador',
-            static::COBRADOR     => 'Cobrador',
+            static::RECAUDADOR     => 'Recaudador',
+            static::CLIENTE     => 'Cliente',
         };
     }
 }

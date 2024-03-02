@@ -15,31 +15,31 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $roleAdmin         = Role::where('name', RoleEnum::ADMINISTRADOR)->first();
-        $roleCobrador   = Role::where('name', RoleEnum::COBRADOR)->first();
+        $roleRecaudador   = Role::where('name', RoleEnum::RECAUDADOR)->first();
 
         Permission::create(['name' => 'Dashboard'])->syncRoles([
             $roleAdmin,
-            $roleCobrador
+            $roleRecaudador
         ]);
 
         Permission::create(['name' => 'Leer Usuarios'])->syncRoles([
             $roleAdmin,
-            $roleCobrador
+            $roleRecaudador
         ]);
 
         Permission::create(['name' => 'Actualizar Usuarios'])->syncRoles([
             $roleAdmin,
-            $roleCobrador
+            $roleRecaudador
         ]);
 
         Permission::create(['name' => 'Cambiar Estado Usuario'])->syncRoles([
             $roleAdmin,
-            $roleCobrador
+            $roleRecaudador
         ]);
 
         Permission::create(['name' => 'Registrar recaudo'])->syncRoles([
             $roleAdmin,
-            $roleCobrador
+            $roleRecaudador
         ]);
     }
 }
