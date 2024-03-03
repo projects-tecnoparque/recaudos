@@ -12,8 +12,8 @@ class DocumentTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->words(3, true),
             'abbreviation' => $this->faker->bothify('???'),
+            'name' => $this->faker->unique()->words(3, true),
         ];
     }
 }

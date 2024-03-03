@@ -11,8 +11,16 @@ class OperationalSectorFactory extends Factory
 
     public function definition(): array
     {
-    	return [
-    	    //
-    	];
+        return [
+
+            'name' => $this->faker->unique()->words(1, true),
+            // 'code' => function(array $attributes){
+            //     $name = trim(collect(explode(' ', "{$attributes['name']}"))->map(function ($segment) {
+            //         return substr($segment, 0, 3);
+            //     })->join(' '));
+            //     return $name;
+            // },
+            'code' => generateCode(OperationalSector::class)
+        ];
     }
 }

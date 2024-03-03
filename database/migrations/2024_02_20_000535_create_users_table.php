@@ -16,6 +16,7 @@ return new class extends Migration
          * Schema usuarios.
          * - id
          * - document_type_id = tipo documento id -> foreing to document_types
+         * - document = documento
          * - names = nombres
          * - surnames = apellidos
          * - phone = telefono
@@ -31,9 +32,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('document_type_id');
             $table->string('document', 20)->unique();
-            $table->string('names');
-            $table->string('surnames');
-            $table->string('phone');
+            $table->string('names', 50);
+            $table->string('surnames', 50);
+            $table->string('phone', 20);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
