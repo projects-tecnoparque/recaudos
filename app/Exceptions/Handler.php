@@ -54,13 +54,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        // dd($exception);
         if ($exception instanceof AuthorizationException) {
-            return response()->json((['status' => 403, 'message' => 'Insufficient privileges to perform this action']), 403);
+            return response()->json((['status' => 403, 'message' =>  $exception->getMessage()]), 403);
         }
 
         if ($exception instanceof MethodNotAllowedHttpException) {
-            return response()->json((['status' => 405, 'message' => 'Method Not Allowed']), 405);
+            return response()->json((['status' => 405, 'message' =>  $exception->getMessage()]), 405);
         }
 
         if ($exception instanceof HttpException) {
