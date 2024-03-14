@@ -21,7 +21,10 @@ $router->get('/version', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('login', 'AuthController@login');
+$router->post('login', [
+    // 'middleware' => 'header-json',
+    'uses' => 'AuthController@login'
+]);
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('logout', 'AuthController@logout');
     $router->post('refresh', 'AuthController@refresh');

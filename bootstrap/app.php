@@ -88,6 +88,7 @@ $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
     'permission' => App\Http\Middleware\PermissionMiddleware::class, // cloned from Spatie\Permission\Middleware
     'role'       => App\Http\Middleware\RoleMiddleware::class,  // cloned from Spatie\Permission\Middleware
+    'header-json' => App\Http\Middleware\ValidateJsonApiHeaders::class
 ]);
 
 
@@ -128,6 +129,7 @@ $app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't ha
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
+    'middleware' => 'header-json'
 ], function ($router) {
     require __DIR__.'/../routes/web.php';
 });

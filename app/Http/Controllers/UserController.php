@@ -20,14 +20,7 @@ class UserController extends Controller
     {
         $users = User::allowedSorts(['document', 'name', 'surname', 'email', 'status']);
 
-        return UserCollection::make(
-            $users->paginate(
-                request('page.size', 15),
-                ['*'],
-                'page[number]',
-                request('page.number', 1)
-            )->appends(request()->only('sort','page.size'))
-        );
+        return UserCollection::make($users->jsonPaginate());
     }
 
     /**

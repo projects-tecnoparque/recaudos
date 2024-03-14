@@ -63,7 +63,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof HttpException) {
-            return response()->json((['status' => 400, 'message' => $exception->getMessage()]), 400);
+            return response()->json((['status' => $exception->getStatusCode(), 'message' => $exception->getMessage()]), $exception->getStatusCode());
         }
         if ($exception instanceof NotFoundHttpException) {
             return response()->json((['status' => 404, 'message' => 'The requested resource was not found']), 404);
