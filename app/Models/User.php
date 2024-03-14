@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BooleanStatus as StatusUserEnum;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -41,7 +42,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime'
+        'email_verified_at' => 'datetime',
+        'status' => StatusUserEnum::class
     ];
 
     /**

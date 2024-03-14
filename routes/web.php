@@ -28,9 +28,13 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('user-profile', 'AuthController@me');
 });
 
-
-$router->get('/usuarios', 'UserController@index');
-$router->get('/usuarios/{id}', 'UserController@show');
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->get('/usuarios', 'UserController@index');
+    $router->post('/usuarios', 'UserController@store');
+    $router->get('/usuarios/{id}', 'UserController@show');
+    $router->put('/usuarios/{id}', 'UserController@update');
+    $router->delete('/usuarios/{id}', 'UserController@destroy');
+});
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/tipos-documentos', 'DocumentTypeController@index');

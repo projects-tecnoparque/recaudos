@@ -11,10 +11,11 @@ class CreateDocumentTypeTest extends TestCase
     /** @test */
     public function can_create_document_types()
     {
-        // $user = User::factory()->create();
+        $this->withoutMiddleware();
+        $user = User::factory()->create();
 
         $response =  $this
-            // ->actingAs($user, 'api')
+            ->actingAs($user, 'api')
             ->json('POST', '/tipos-documentos', [
                 'abreviatura' => 'CC',
                 'nombre' => 'Cedula de ciudadadania',
@@ -42,10 +43,10 @@ class CreateDocumentTypeTest extends TestCase
     /** @test */
     public function abreviature_is_required()
     {
-        // $user = User::factory()->create();
+        $user = User::factory()->create();
 
         $response =  $this
-        // ->actingAs($user, 'api')
+        ->actingAs($user, 'api')
         ->json('POST', '/tipos-documentos', [
             'data' => [
                 'attributes' => [
@@ -65,10 +66,11 @@ class CreateDocumentTypeTest extends TestCase
 
     public function name_is_required()
     {
-        // $user = User::factory()->create();
+        $this->withoutMiddleware();
+        $user = User::factory()->create();
 
         $response =  $this
-        // ->actingAs($user, 'api')
+        ->actingAs($user, 'api')
         ->json('POST', '/tipos-documentos', [
             'data' => [
                 'attributes' => [

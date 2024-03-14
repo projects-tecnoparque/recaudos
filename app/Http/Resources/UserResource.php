@@ -22,6 +22,9 @@ class UserResource extends JsonResource
                 'nombres' => $this->resource->names,
                 'apellidos' => $this->resource->surnames,
                 'correo' => $this->resource->email,
+                'telefono' => $this->resource->phone,
+                'estado' => $this->resource->status,
+                'nombre_estado' => $this->resource->status->label(),
             ],
             'links' => [
                 'self' => url('/usuarios/' . $this->resource->getRouteKey())

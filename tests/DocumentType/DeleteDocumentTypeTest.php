@@ -11,11 +11,11 @@ class DeleteDocumentTypeTest extends TestCase
     /** @test */
     public function can_delete_document_types()
     {
-        // $user = User::factory()->create();
+        $user = User::factory()->create();
 
         $documentType = DocumentType::factory()->create();
         $this
-        // ->actingAs($user)
+        ->actingAs($user)
         ->json('DELETE', '/tipos-documentos/'.$documentType->getRouteKey())->seeStatusCode(204);
 
     }
