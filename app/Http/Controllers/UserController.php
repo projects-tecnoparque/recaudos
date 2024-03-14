@@ -18,9 +18,11 @@ class UserController extends Controller
      */
     public function index(): UserCollection
     {
-        $users = User::allowedSorts(['document', 'name', 'surname', 'email', 'status']);
+        $users = User::allowedSorts([
+            'document', 'name', 'surname', 'email', 'status'
+        ])->jsonPaginate();
 
-        return UserCollection::make($users->jsonPaginate());
+        return UserCollection::make($users);
     }
 
     /**
@@ -40,7 +42,7 @@ class UserController extends Controller
             'surnames' =>  $request->get('apellidos'),
             'phone' =>  $request->get('telefono'),
             'email' =>  $request->get('correo'),
-            'password' =>  $request->get('password'),
+            'password' =>  bcrypt($request->get('password')),
             'status' => \App\Enums\BooleanStatus::True->value
         ]);
 
@@ -79,7 +81,7 @@ class UserController extends Controller
             'surnames' =>  $request->get('apellidos'),
             'phone' =>  $request->get('telefono'),
             'email' =>  $request->get('correo'),
-            'password' =>  $request->get('password'),
+            'password' =>  bcrypt($request->get('password')),
             'status' => $request->get('estado')
         ]);
 

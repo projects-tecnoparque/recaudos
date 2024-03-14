@@ -18,9 +18,12 @@ class DocumentTypeController extends Controller
      */
     public function index(): DocumentTypeCollection
     {
-        $documentTypes = DocumentType::allowedSorts(['name', 'abbreviation']);
+        $documentTypes = DocumentType::query()
+            ->allowedFilters(['name', 'abbreviation', 'month', 'year'])
+            ->allowedSorts(['name', 'abbreviation'])
+            ->jsonPaginate();
 
-        return DocumentTypeCollection::make($documentTypes->jsonPaginate());
+        return DocumentTypeCollection::make($documentTypes);
     }
 
     /**
