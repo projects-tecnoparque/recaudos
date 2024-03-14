@@ -17,6 +17,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use Authenticatable, Authorizable, HasFactory, HasRoles;
 
+
     protected $guard_name = 'api';
 
     protected $fillable = [
