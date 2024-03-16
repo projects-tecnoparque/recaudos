@@ -8,6 +8,9 @@ use App\Http\Resources\UserCollection;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Response;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
+
 
 class UserController extends Controller
 {
@@ -16,13 +19,20 @@ class UserController extends Controller
      *
      * @return UserCollection
      */
-    public function index(): UserCollection
+    public function index(): AnonymousResourceCollection
     {
-        $users = User::allowedSorts([
+        $users = User::query()
+        ->allowedSorts([
             'document', 'name', 'surname', 'email', 'status'
-        ])->jsonPaginate();
+        ])
+        //->allowedFilters(['document', 'name', 'surname', 'email', 'status'])
+        ->allowedSorts([
+            'document', 'name', 'surname', 'email', 'status'
+        ])
+        ->sparseFielset()
+        ->jsonPaginate();
 
-        return UserCollection::make($users);
+        return UserResource::collection($users);
     }
 
     /**
@@ -55,9 +65,11 @@ class UserController extends Controller
      * @param  int  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($id): UserResource
+    public function show($id): JsonResource
     {
-        $user = User::findOrFail($id);
+        $user = User::query()
+        ->sparseFielset()
+        ->findOrFail($id);
         return UserResource::make($user);
     }
 
@@ -75,14 +87,13 @@ class UserController extends Controller
         $this->saveUserRequest($request);
 
         $user->update([
-            'document_type_id' => $request->get('tipo_documento_id'),
-            'document' => $request->get('documento'),
-            'names' =>  $request->get('nombres'),
-            'surnames' =>  $request->get('apellidos'),
-            'phone' =>  $request->get('telefono'),
-            'email' =>  $request->get('correo'),
-            'password' =>  bcrypt($request->get('password')),
-            'status' => $request->get('estado')
+            'document_type_id' => $request->get('document_type_id'),
+            'document' => $request->get('document'),
+            'names' =>  $request->get('names'),
+            'surnames' =>  $request->get('surnames'),
+            'phone' =>  $request->get('phone'),
+            'email' =>  $request->get('email'),
+            'status' => $request->get('status')
         ]);
 
         return UserResource::make($user);
@@ -104,14 +115,14 @@ class UserController extends Controller
     protected function saveUserRequest(Request $request): void
     {
         $this->validate($request, [
-            'tipo_documento_id' => 'required',
-            'documento' => 'required|min:1|max:20|' . Rule::unique('users', 'document')->ignore($request->route('id')),
-            'nombres' => 'required|min:1|max:50',
-            'apellidos' => 'required|min:1|max:50',
-            'telefono' => 'required|min:1|max:20',
-            'correo' => 'required|min:1|max:255|email|' . Rule::unique('users', 'email')->ignore($request->route('id')),
+            'document_type_id' => 'required',
+            'document' => 'required|min:1|max:20|' . Rule::unique('users', 'document')->ignore($request->route('id')),
+            'names' => 'required|min:1|max:50',
+            'surnames' => 'required|min:1|max:50',
+            'phone' => 'required|min:1|max:20',
+            'email' => 'required|min:1|max:255|email|' . Rule::unique('users', 'email')->ignore($request->route('id')),
             'password' => 'required|min:1|max:255',
-            'estado' => 'required',
+            'status' => 'required',
         ]);
     }
 }

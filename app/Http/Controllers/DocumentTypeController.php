@@ -8,6 +8,8 @@ use App\Models\DocumentType;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class DocumentTypeController extends Controller
 {
@@ -16,7 +18,7 @@ class DocumentTypeController extends Controller
      *
      * @return Response
      */
-    public function index(): DocumentTypeCollection
+    public function index(): AnonymousResourceCollection
     {
         $documentTypes = DocumentType::query()
             ->allowedFilters(['name', 'abbreviation', 'month', 'year'])
@@ -24,7 +26,7 @@ class DocumentTypeController extends Controller
             ->sparseFielset()
             ->jsonPaginate();
 
-        return DocumentTypeCollection::make($documentTypes);
+        return DocumentTypeResource::collection($documentTypes);
     }
 
     /**
@@ -52,7 +54,7 @@ class DocumentTypeController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id): DocumentTypeResource
+    public function show($id): JsonResource
     {
         $documentType = DocumentType::query()
         ->sparseFielset()

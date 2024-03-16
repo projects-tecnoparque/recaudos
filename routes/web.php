@@ -22,7 +22,6 @@ $router->get('/version', function () use ($router) {
 });
 
 $router->post('login', [
-    // 'middleware' => 'header-json',
     'uses' => 'AuthController@login'
 ]);
 $router->group(['middleware' => 'auth'], function () use ($router) {
@@ -32,18 +31,18 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 });
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
-    $router->get('/usuarios', 'UserController@index');
-    $router->post('/usuarios', 'UserController@store');
-    $router->get('/usuarios/{id}', 'UserController@show');
-    $router->put('/usuarios/{id}', 'UserController@update');
-    $router->delete('/usuarios/{id}', 'UserController@destroy');
+    $router->get('/users', 'UserController@index');
+    $router->post('/users', 'UserController@store');
+    $router->get('/users/{id}', 'UserController@show');
+    $router->put('/users/{id}', 'UserController@update');
+    $router->delete('/users/{id}', 'UserController@destroy');
 });
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
-    $router->get('/tipos-documentos', 'DocumentTypeController@index');
-    $router->post('/tipos-documentos', 'DocumentTypeController@store');
-    $router->get('/tipos-documentos/{id}', 'DocumentTypeController@show');
-    $router->put('/tipos-documentos/{id}', 'DocumentTypeController@update');
-    $router->delete('/tipos-documentos/{id}', 'DocumentTypeController@destroy');
+    $router->get('/document-types', 'DocumentTypeController@index');
+    $router->post('/document-types', 'DocumentTypeController@store');
+    $router->get('/document-types/{id}', 'DocumentTypeController@show');
+    $router->put('/document-types/{id}', 'DocumentTypeController@update');
+    $router->delete('/document-types/{id}', 'DocumentTypeController@destroy');
 });
 

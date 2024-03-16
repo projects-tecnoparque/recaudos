@@ -46,6 +46,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'status' => StatusUserEnum::class
     ];
 
+    public $resourceType = 'users';
+
     /**
      * Get the customer associated with the user.
      */
