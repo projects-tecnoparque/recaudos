@@ -58,9 +58,8 @@ class JsonApiQueryBuilder
                 $resourceType = $this->model->resourceType;
             }
 
-
             $fields = explode(',', request('fields.'.$resourceType));
-            // dd($fields);
+
             $routeKeyName = $this->model->getRouteKeyName();
             if(! in_array($routeKeyName, $fields)){
                 $fields[] = $routeKeyName;
