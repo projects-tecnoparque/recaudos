@@ -46,6 +46,29 @@ class JsonApiQueryBuilder
         };
     }
 
+    public function sparseFielset(): Closure
+    {
+        return function(){
+            /** @var Builder $this*/
+            if(request()->isNotFilled('fields')){
+                return $this;
+            }
+            $resourceType = $this->model->getTable();
+            if(property_exists($this->model, 'resourceType')){
+                $resourceType = $this->model->resourceType;
+            }
+
+
+            $fields = explode(',', request('fields.'.$resourceType));
+            // dd($fields);
+            $routeKeyName = $this->model->getRouteKeyName();
+            if(! in_array($routeKeyName, $fields)){
+                $fields[] = $routeKeyName;
+            }
+            return $this->addSelect($fields);
+        };
+    }
+
     public function jsonPaginate(): Closure
     {
         return function(){

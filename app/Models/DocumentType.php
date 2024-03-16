@@ -20,6 +20,8 @@ class DocumentType extends Model
         'abbreviation', 'name'
     ];
 
+    public $resourceType = 'document-types';
+
     public function users(): HasMany
     {
         return $this->hasMany(User::class, 'document_type_id', 'id');

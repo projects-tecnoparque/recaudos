@@ -15,22 +15,26 @@ class DocumentTypeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'type' => 'TipoDocumentos',
+            'type' => 'DocumentType',
             'id' => (string) $this->resource->getRouteKey(),
-            'attributes' => [
-                'abreviatura' => $this->resource->abbreviation,
-                'nombre' => $this->resource->name,
-            ],
+            'attributes' => array_filter([
+                'abbreviation' => $this->resource->abbreviation,
+                'name' => $this->resource->name,
+                'created_at' => $this->resource->created_at,
+                'updated_at' => $this->resource->updated_at,
+            ], function($value){
+                if(request()->isNotFilled('fields')){
+                    return true;
+                }
+                $fields = explode(',', request('fields.document-types'));
+                if($value === $this->getRouteKey()){
+                    return in_array('slug', $fields);
+                }
+                return $value;
+            }),
             'links' => [
                 'self' => url('/tipos-documentos/' . $this->resource->getRouteKey())
             ]
         ];
     }
-
-    // public function toResponse($request)
-    // {
-    //     return parent::toResponse($request)->withHeaders([
-    //         'Location' => url('/tipos-documentos/' . $this->resource->getRouteKey())
-    //     ]);
-    // }
 }

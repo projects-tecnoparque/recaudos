@@ -21,6 +21,7 @@ class DocumentTypeController extends Controller
         $documentTypes = DocumentType::query()
             ->allowedFilters(['name', 'abbreviation', 'month', 'year'])
             ->allowedSorts(['name', 'abbreviation'])
+            ->sparseFielset()
             ->jsonPaginate();
 
         return DocumentTypeCollection::make($documentTypes);
@@ -38,8 +39,8 @@ class DocumentTypeController extends Controller
         $this->saveDocumentTypeRequest($request);
 
         $documentType = DocumentType::create([
-            'abbreviation' => $request->get('abreviatura'),
-            'name' =>  $request->get('nombre')
+            'abbreviation' => $request->get('abbreviation'),
+            'name' =>  $request->get('name')
         ]);
 
         return DocumentTypeResource::make($documentType);
@@ -53,7 +54,9 @@ class DocumentTypeController extends Controller
      */
     public function show($id): DocumentTypeResource
     {
-        $documentType = DocumentType::findOrFail($id);
+        $documentType = DocumentType::query()
+        ->sparseFielset()
+        ->findOrFail($id);
         return DocumentTypeResource::make($documentType);
     }
 
@@ -71,8 +74,8 @@ class DocumentTypeController extends Controller
         $this->saveDocumentTypeRequest($request);
 
         $documentType->update([
-            'abbreviation' => $request->get('abreviatura'),
-            'name' =>  $request->get('nombre')
+            'abbreviation' => $request->get('abbreviation'),
+            'name' =>  $request->get('name')
         ]);
 
         return DocumentTypeResource::make($documentType);
@@ -94,8 +97,8 @@ class DocumentTypeController extends Controller
     protected function saveDocumentTypeRequest(Request $request): void
     {
         $this->validate($request, [
-            'abreviatura' => 'required|alpha_num|min:1|max:3|' . Rule::unique('document_types', 'abbreviation')->ignore($request->route('id')),
-            'nombre' => 'required|min:1|max:50|' . Rule::unique('document_types', 'name')->ignore($request->route('id')),
+            'abbreviation' => 'required|alpha_num|min:1|max:3|' . Rule::unique('document_types', 'abbreviation')->ignore($request->route('id')),
+            'name' => 'required|min:1|max:50|' . Rule::unique('document_types', 'name')->ignore($request->route('id')),
         ]);
     }
 }
