@@ -26,7 +26,7 @@ class UserFactory extends Factory
         return [
             'document_type_id' => DocumentType::all()->random()->id,
             'document' => $this->faker->unique()->numerify('##########'),
-            'names' => $this->faker->name,
+            'names' => $this->faker->firstName(),
             'surnames' => $this->faker->lastName(),
             'phone' =>  $this->faker->e164PhoneNumber(),
             'email' => $this->faker->unique()->safeEmail,

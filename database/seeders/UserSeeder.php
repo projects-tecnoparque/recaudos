@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'names' => 'usertest',
             'email' => 'test@email.com',
         ])
-        ->assignRole(RoleEnum::ADMINISTRADOR);
+        ->assignRole([RoleEnum::ADMINISTRADOR, RoleEnum::RECAUDADOR]);
 
         //customers ->clientes
         User::factory()

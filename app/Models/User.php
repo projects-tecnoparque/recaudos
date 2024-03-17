@@ -6,13 +6,14 @@ use App\Enums\BooleanStatus as StatusUserEnum;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Laravel\Lumen\Auth\Authorizable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Laravel\Lumen\Auth\Authorizable;
 use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
@@ -59,6 +60,55 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function documentType(): BelongsTo
     {
         return $this->belongsTo(DocumentType::class, 'document_type_id', 'id');
+    }
+
+    public function scopeDocument(Builder $query, $value)
+    {
+        $query->whereDocument($value);
+    }
+
+    public function scopeNames(Builder $query, $value)
+    {
+        $query->where('names','LIKE', "%{$value}%");
+    }
+
+    public function scopeSurnames(Builder $query, $value)
+    {
+        $query->where('surnames','LIKE', "%{$value}%");
+    }
+
+    public function scopeEmail(Builder $query, $value)
+    {
+        $query->whereEmail($value);
+    }
+
+    public function scopeStatus(Builder $query, $value)
+    {
+        $query->whereStatus($value);
+    }
+
+    public function scopeDocumentTypes(Builder $query, $documentTypes)
+    {
+        $query->whereHas('documentType', function($q) use($documentTypes){
+            $q->whereIn('name', explode(',', $documentTypes));
+        });
+    }
+
+    public function scopeRoles(Builder $query, $roles)
+    {
+        $query->whereHas('roles', function($q) use($roles){
+            $q->whereIn('name', explode(',', $roles));
+        });
+    }
+
+    public function scopeYear(Builder $query, $year)
+    {
+        $query->whereYear('created_at', $year);
+    }
+
+    public function scopeMonth(Builder $query, $month)
+    {
+        $query->whereMonth('created_at', $month);
     }
 
     /**

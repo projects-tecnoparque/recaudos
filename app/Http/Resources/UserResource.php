@@ -21,4 +21,17 @@ class UserResource extends JsonResource
             // 'label_status' => $this->resource->status->label(),
         ];
     }
+
+    public function getRelationshipLinks(): array
+    {
+        return ['documentType', 'roles'];
+    }
+
+    public function getIncludes(): array
+    {
+        return [
+            DocumentTypeResource::make($this->whenLoaded('documentType')),
+            RoleResource::newCollection($this->whenLoaded('roles')),
+        ];
+    }
 }

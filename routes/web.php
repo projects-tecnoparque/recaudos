@@ -14,6 +14,8 @@
 */
 
 $router->get('/', function () use ($router) {
+    $roles = App\Models\Role::query()->with('users')->get();
+    return response()->json(['data' => $roles]);
     return "<center>". config('app.name'). "</center>";
 });
 
@@ -31,6 +33,22 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 });
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->get('/document-types', 'DocumentTypeController@index');
+    $router->post('/document-types', 'DocumentTypeController@store');
+    $router->get('/document-types/{id}', 'DocumentTypeController@show');
+    $router->put('/document-types/{id}', 'DocumentTypeController@update');
+    $router->delete('/document-types/{id}', 'DocumentTypeController@destroy');
+});
+
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->get('/roles', 'RoleController@index');
+    $router->get('/roles/{id}', 'RoleController@show');
+});
+
+
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->get('/users/{id}/relationships/document-type', fn() => 'TODO');
+    $router->get('/users/{id}/document-type', fn() => 'TODO');
     $router->get('/users', 'UserController@index');
     $router->post('/users', 'UserController@store');
     $router->get('/users/{id}', 'UserController@show');
@@ -39,10 +57,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 });
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
-    $router->get('/document-types', 'DocumentTypeController@index');
-    $router->post('/document-types', 'DocumentTypeController@store');
-    $router->get('/document-types/{id}', 'DocumentTypeController@show');
-    $router->put('/document-types/{id}', 'DocumentTypeController@update');
-    $router->delete('/document-types/{id}', 'DocumentTypeController@destroy');
+    $router->get('/customers', 'CustomerController@index');
+    $router->get('/customers/{id}', 'CustomerController@show');
 });
+
 

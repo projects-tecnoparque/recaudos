@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\UserCollection;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Response;
@@ -17,17 +16,16 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return UserCollection
+     * @return AnonymousResourceCollection
      */
     public function index(): AnonymousResourceCollection
     {
         $users = User::query()
-        ->allowedSorts([
-            'document', 'name', 'surname', 'email', 'status'
-        ])
-        //->allowedFilters(['document', 'name', 'surname', 'email', 'status'])
-        ->allowedSorts([
-            'document', 'name', 'surname', 'email', 'status'
+        ->allowedIncludes(['documentType', 'roles'])
+        ->allowedFilters([
+            'document', 'names', 'surnames', 'email', 'status', 'documentTypes','roles'
+        ])->allowedSorts([
+            'document', 'names', 'surnames', 'email', 'status'
         ])
         ->sparseFielset()
         ->jsonPaginate();
@@ -63,11 +61,12 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  int  $user
-     * @return \Illuminate\Http\Response
+     * @return JsonResource
      */
     public function show($id): JsonResource
     {
         $user = User::query()
+        ->allowedIncludes(['documentType', 'roles'])
         ->sparseFielset()
         ->findOrFail($id);
         return UserResource::make($user);
@@ -115,7 +114,7 @@ class UserController extends Controller
     protected function saveUserRequest(Request $request): void
     {
         $this->validate($request, [
-            'document_type_id' => 'required',
+            'document_type_id' => 'required|exists:document_types,id',
             'document' => 'required|min:1|max:20|' . Rule::unique('users', 'document')->ignore($request->route('id')),
             'names' => 'required|min:1|max:50',
             'surnames' => 'required|min:1|max:50',

@@ -2,7 +2,10 @@
 
 namespace App\JsonApi\Traits;
 
+use App\Http\Resources\DocumentTypeResource;
+use App\JsonApi\Document;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\MissingValue;
 
 trait JsonApiResource
 {
@@ -14,16 +17,26 @@ trait JsonApiResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
-        return [
-            'type' => $this->getResourceType(),
-            'id' => (string) $this->resource->getRouteKey(),
-            'attributes' => $this->filterAttributes($this->toJsonApi()),
-            'links' => [
-                'self' => url($this->getResourceType() . '/'.$this->resource->getRouteKey())
-            ]
-        ];
+        if($request->filled('include')){
+            foreach($this->getIncludes() as $include){
+                if($include->resource instanceof MissingValue){
+                    continue;
+                }
+                $this->with['included'][] = $include;
+            }
+        }
+        return Document::type($this->resource->getResourceType())
+                ->id($this->resource->getRouteKey())
+                ->attributes(
+                    $this->filterAttributes($this->toJsonApi())
+                )
+                ->relationshipLinks($this->getRelationshipLinks())
+                ->links([
+                    'self' => url($this->resource->getResourceType() . '/'.$this->resource->getRouteKey())
+                ])
+                ->get('data');
     }
 
     public function filterAttributes(array $attributes): array
@@ -40,10 +53,32 @@ trait JsonApiResource
         });
     }
 
-    public static function collection($resource): AnonymousResourceCollection
+    public function getIncludes(): array
     {
-        $collection = parent::collection($resource);
-        $collection->with['links'] = ['self' => $resource->path()];
+        return [];
+    }
+
+    public function getRelationshipLinks(): array
+    {
+        return [];
+    }
+
+    public static function collection($resources): AnonymousResourceCollection
+    {
+        $collection = parent::collection($resources);
+        if(request()->filled('include')){
+            foreach($resources as $resource){
+                foreach($resource->getIncludes() as $include){
+                    if($include->resource instanceof MissingValue){
+                        // dd($include->resource);
+                        continue;
+                    }
+                    $collection->with['included'][] = $include;
+                }
+            }
+        }
+
+        $collection->with['links'] = ['self' => $resources->path()];
         return $collection;
     }
 }
