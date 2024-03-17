@@ -14,7 +14,7 @@
 */
 
 $router->get('/', function () use ($router) {
-    $roles = App\Models\Role::query()->with('users')->get();
+    $roles = App\Models\Permission::query()->with('roles')->get();
     return response()->json(['data' => $roles]);
     return "<center>". config('app.name'). "</center>";
 });
@@ -43,6 +43,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/roles', 'RoleController@index');
     $router->get('/roles/{id}', 'RoleController@show');
+});
+
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->get('/permissions', 'PermissionController@index');
+    $router->get('/permissions/{id}', 'PermissionController@show');
 });
 
 

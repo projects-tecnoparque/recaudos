@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Resources\DocumentTypeCollection;
 use App\Http\Resources\DocumentTypeResource;
 use App\Models\DocumentType;
-use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 
 class DocumentTypeController extends Controller
 {

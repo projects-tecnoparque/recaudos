@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use App\Http\Resources\RoleResource;
+use App\Http\Resources\PermissionResource;
+use App\Models\Permission;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoleController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,15 +16,16 @@ class RoleController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        $roles = Role::query()
-        ->allowedIncludes(['users'])
+        $permissions = Permission::query()
+        ->allowedIncludes(['users', 'roles'])
         ->allowedFilters(['name'])
         ->allowedSorts(['name'])
         ->sparseFielset()
         ->jsonPaginate();
 
-        return RoleResource::collection($roles);
+        return PermissionResource::collection($permissions);
     }
+
 
     /**
      * Display the specified resource.
@@ -34,10 +35,11 @@ class RoleController extends Controller
      */
     public function show($id): JsonResource
     {
-        $role = Role::query()
-        ->allowedIncludes(['users'])
+        $permission = Permission::query()
+        ->allowedIncludes(['users', 'roles'])
         ->sparseFielset()
         ->findOrFail($id);
-        return RoleResource::make($role);
+
+        return PermissionResource::make($permission);
     }
 }
