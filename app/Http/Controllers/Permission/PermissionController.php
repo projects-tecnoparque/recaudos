@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Permission;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\PermissionResource;
 use App\Models\Permission;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;

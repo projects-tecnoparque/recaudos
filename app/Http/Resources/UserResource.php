@@ -18,7 +18,9 @@ class UserResource extends JsonResource
             'email' => $this->resource->email,
             'phone' => $this->resource->phone,
             'status' => $this->resource->status,
-            // 'label_status' => $this->resource->status->label(),
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
+            'label_status' => $this->resource->status->label(),
         ];
     }
 

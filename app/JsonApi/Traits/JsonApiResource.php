@@ -25,6 +25,7 @@ trait JsonApiResource
             ->toArray();
     }
 
+
     public function toArray($request): array
     {
         if($request->filled('include')){
@@ -73,7 +74,9 @@ trait JsonApiResource
 
     public static function collection($resources): AnonymousResourceCollection
     {
+        
         $collection = parent::collection($resources);
+        // dd($collection);
         if(request()->filled('include')){
             foreach($resources as $resource){
                 foreach($resource->getIncludes() as $include){
@@ -102,21 +105,6 @@ trait JsonApiResource
 
     public static function newCollection($resources)
     {
-        $attributes =
-        $identifiers = [];
-        foreach($resources as $resource){
-            // $this->filterAttributes($this->toJsonApi());
-            $identifiers[] = Document::type($resource->getResourceType())
-            ->id($resource->getRouteKey())
-            // ->attributes(
-            //     $resource->filterAttributes
-            // )
-            ->links([
-                'self' => url($resource->getResourceType() . '/'.$resource->getRouteKey())
-            ])
-            ->get('data');
-
-        }
-        return $identifiers;
+        return parent::newCollection($resources);
     }
 }

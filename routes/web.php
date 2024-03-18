@@ -24,9 +24,9 @@ $router->get('/version', function () use ($router) {
 });
 
 $router->post('login', [
-    'uses' => 'AuthController@login'
+    'uses' => 'Auth\AuthController@login'
 ]);
-$router->group(['middleware' => 'auth'], function () use ($router) {
+$router->group(['namespace' => 'Auth', 'middleware' => 'auth'], function () use ($router) {
     $router->post('logout', 'AuthController@logout');
     $router->post('refresh', 'AuthController@refresh');
     $router->post('user-profile', 'AuthController@me');
@@ -45,13 +45,13 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/roles/{id}', 'RoleController@show');
 });
 
-$router->group(['middleware' => 'auth'], function () use ($router) {
+$router->group(['namespace' => 'Permission', 'middleware' => 'auth'], function () use ($router) {
     $router->get('/permissions', 'PermissionController@index');
     $router->get('/permissions/{id}', 'PermissionController@show');
 });
 
 
-$router->group(['middleware' => 'auth'], function () use ($router) {
+$router->group(['namespace' => 'User', 'middleware' => 'auth'], function () use ($router) {
     $router->get('/users/{id}/relationships/document-type','UserDocumentTypeController@index');
     $router->get('/users/{id}/document-type', 'UserDocumentTypeController@show');
     $router->get('/users/{id}/relationships/roles','UserRoleController@index');
