@@ -17,7 +17,7 @@ class RoleController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $roles = Role::query()
-        ->allowedIncludes(['users'])
+        ->allowedIncludes(['users', 'permissions'])
         ->allowedFilters(['name'])
         ->allowedSorts(['name'])
         ->sparseFielset()
@@ -35,7 +35,7 @@ class RoleController extends Controller
     public function show($id): JsonResource
     {
         $role = Role::query()
-        ->allowedIncludes(['users'])
+        ->allowedIncludes(['users', 'permissions'])
         ->sparseFielset()
         ->findOrFail($id);
         return RoleResource::make($role);

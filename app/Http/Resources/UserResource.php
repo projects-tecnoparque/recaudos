@@ -24,7 +24,7 @@ class UserResource extends JsonResource
 
     public function getRelationshipLinks(): array
     {
-        return ['documentType', 'roles'];
+        return ['documentType', 'roles', 'permissions'];
     }
 
     public function getIncludes(): array
@@ -32,6 +32,7 @@ class UserResource extends JsonResource
         return [
             DocumentTypeResource::make($this->whenLoaded('documentType')),
             RoleResource::newCollection($this->whenLoaded('roles')),
+            PermissionResource::newCollection($this->whenLoaded('permissions')),
         ];
     }
 }

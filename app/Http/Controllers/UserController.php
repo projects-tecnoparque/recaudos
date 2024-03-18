@@ -21,7 +21,7 @@ class UserController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $users = User::query()
-        ->allowedIncludes(['documentType', 'roles'])
+        ->allowedIncludes(['documentType', 'roles', 'permissions'])
         ->allowedFilters([
             'document', 'names', 'surnames', 'email', 'status', 'documentTypes','roles'
         ])->allowedSorts([
@@ -66,7 +66,7 @@ class UserController extends Controller
     public function show($id): JsonResource
     {
         $user = User::query()
-        ->allowedIncludes(['documentType', 'roles'])
+        ->allowedIncludes(['documentType', 'roles', 'permissions'])
         ->sparseFielset()
         ->findOrFail($id);
         return UserResource::make($user);

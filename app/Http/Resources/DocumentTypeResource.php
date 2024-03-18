@@ -18,4 +18,13 @@ class DocumentTypeResource extends JsonResource
             'updated_at' => $this->resource->updated_at
         ];
     }
+
+
+
+    public function getIncludes(): array
+    {
+        return [
+            UserResource::newCollection($this->whenLoaded('users'))
+        ];
+    }
 }

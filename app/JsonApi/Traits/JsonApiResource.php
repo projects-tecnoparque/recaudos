@@ -17,6 +17,14 @@ trait JsonApiResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+
+    public static function identifier($resource): array
+    {
+        return Document::type($resource->getResourceType())
+            ->id($resource->getRouteKey())
+            ->toArray();
+    }
+
     public function toArray($request): array
     {
         if($request->filled('include')){
@@ -80,5 +88,35 @@ trait JsonApiResource
 
         $collection->with['links'] = ['self' => $resources->path()];
         return $collection;
+    }
+
+    public static function collectionIdentifiers($resources)
+    {
+        $identifiers = [];
+        foreach($resources as $resource){
+            $identifiers[] = self::identifier($resource);
+
+        }
+        return $identifiers;
+    }
+
+    public static function newCollection($resources)
+    {
+        $attributes =
+        $identifiers = [];
+        foreach($resources as $resource){
+            // $this->filterAttributes($this->toJsonApi());
+            $identifiers[] = Document::type($resource->getResourceType())
+            ->id($resource->getRouteKey())
+            // ->attributes(
+            //     $resource->filterAttributes
+            // )
+            ->links([
+                'self' => url($resource->getResourceType() . '/'.$resource->getRouteKey())
+            ])
+            ->get('data');
+
+        }
+        return $identifiers;
     }
 }

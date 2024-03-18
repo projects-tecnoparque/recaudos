@@ -21,6 +21,7 @@ class DocumentTypeController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $documentTypes = DocumentType::query()
+            ->allowedIncludes(['users'])
             ->allowedFilters(['name', 'abbreviation', 'month', 'year'])
             ->allowedSorts(['name', 'abbreviation'])
             ->sparseFielset()
@@ -57,6 +58,7 @@ class DocumentTypeController extends Controller
     public function show($id): JsonResource
     {
         $documentType = DocumentType::query()
+        ->allowedIncludes(['users'])
         ->sparseFielset()
         ->findOrFail($id);
         return DocumentTypeResource::make($documentType);

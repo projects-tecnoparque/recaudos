@@ -14,7 +14,7 @@
 */
 
 $router->get('/', function () use ($router) {
-    $roles = App\Models\Permission::query()->with('roles')->get();
+    $roles = App\Models\User::with('permissions')->get();
     return response()->json(['data' => $roles]);
     return "<center>". config('app.name'). "</center>";
 });
@@ -52,8 +52,10 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
-    $router->get('/users/{id}/relationships/document-type', fn() => 'TODO');
-    $router->get('/users/{id}/document-type', fn() => 'TODO');
+    $router->get('/users/{id}/relationships/document-type','UserDocumentTypeController@index');
+    $router->get('/users/{id}/document-type', 'UserDocumentTypeController@show');
+    $router->get('/users/{id}/relationships/roles','UserRoleController@index');
+    $router->get('/users/{id}/roles', 'UserRoleController@show');
     $router->get('/users', 'UserController@index');
     $router->post('/users', 'UserController@store');
     $router->get('/users/{id}', 'UserController@show');

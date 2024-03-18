@@ -20,13 +20,14 @@ class RoleResource extends JsonResource
 
     public function getRelationshipLinks(): array
     {
-        return ['users'];
+        return ['users', 'permissions'];
     }
 
     public function getIncludes(): array
     {
         return [
-            UserResource::newCollection($this->whenLoaded('users'))
+            UserResource::newCollection($this->whenLoaded('users')),
+            PermissionResource::newCollection($this->whenLoaded('permissions')),
         ];
     }
 }
