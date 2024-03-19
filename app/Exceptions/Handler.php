@@ -2,7 +2,6 @@
 
 namespace App\Exceptions;
 
-
 use App\Http\Responses\JsonApiValidationErrorResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -12,6 +11,7 @@ use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -59,36 +59,37 @@ class Handler extends ExceptionHandler
 
     public function handleException($request, Throwable $exception)
     {
+
         if ($exception instanceof ValidationException) {
             return $this->invalidJson($request, $exception);
         }
+
         if ($exception instanceof AuthorizationException) {
             return $this->errorResponse(
-                title: $exception->getMessage(),
-                detail:'This action is unauthorized',
+                title: "This action is unauthorized",
+                detail: $exception->getMessage(),
                 status: 403
             );
         }
 
         if ($exception instanceof MethodNotAllowedHttpException) {
             return $this->errorResponse(
-                title: $exception->getMessage(),
+                title: "Method Not Allowed Http Exception",
                 detail: $exception->getMessage(),
                 status: 405
             );
         }
+        if ($exception instanceof BadRequestException) {
+            throw new JsonApi\BadRequestHttpException($exception->getMessage());
+        }
 
         if ($exception instanceof NotFoundHttpException) {
-            return $this->errorResponse(
-                title: "The requested resource was not found",
-                detail: "The requested resource was not found",
-                status: 404
-            );
+            throw new JsonApi\NotFoundHttpException;
         }
 
         if ($exception instanceof ModelNotFoundException) {
             return $this->errorResponse(
-                title: $exception->getMessage(),
+                title: "Model Not Found Exception",
                 detail: $exception->getMessage(),
                 status: 404
             );
@@ -96,7 +97,7 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof HttpException) {
             return $this->errorResponse(
-                title: $exception->getMessage(),
+                title: "Http Exception",
                 detail: $exception->getMessage(),
                 status: $exception->getStatusCode()
             );
@@ -104,7 +105,7 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof QueryException) {
             return $this->errorResponse(
-                title: $exception->getMessage(),
+                title: "Query Exception",
                 detail: $exception->getMessage(),
                 status: 500
             );
@@ -129,10 +130,12 @@ class Handler extends ExceptionHandler
     protected function errorResponse($title = '', $detail = '', int $status = 200): \Illuminate\Http\JsonResponse
     {
         return response()->json([
-            'errors' => [
-                'title' => $title,
-                'detail' => $detail,
-                'status' => (string) $status
+            [
+                'errors' => [
+                    'title' => $title,
+                    'detail' => $detail,
+                    'status' => (string) $status
+                ]
             ]
         ], (int) $status);
     }

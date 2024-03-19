@@ -17,12 +17,20 @@ class PermissionSeeder extends Seeder
         $roleAdmin         = Role::where('name', RoleEnum::ADMINISTRADOR)->first();
         $roleRecaudador   = Role::where('name', RoleEnum::RECAUDADOR)->first();
 
-        Permission::create(['name' => 'Dashboard'])->syncRoles([
+        Permission::create(['name' => 'Dashboard'])
+        ->syncRoles([
             $roleAdmin,
             $roleRecaudador
         ]);
 
-        Permission::create(['name' => 'Leer Usuarios'])->syncRoles([
+        Permission::create(['name' => 'leer tipos documentos'])
+        ->syncRoles([
+            $roleAdmin,
+            $roleRecaudador
+        ]);
+
+        Permission::create(['name' => 'Leer Usuarios'])
+        ->syncRoles([
             $roleAdmin,
             $roleRecaudador
         ]);

@@ -35,18 +35,17 @@ class Authenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
-
         if ($this->auth->guard($guard)->guest()) {
-
             return response()->json([
-                "error" => [
-                    "source" => ["pointer" => ""],
-                    "title" =>  "Unauthorized",
-                    "detail" => "Unauthorized."
+                'errors' => [
+                    [
+                    'title' => "Unauthorized",
+                    'detail' => "No estas autorizado para acceder",
+                    'status' =>  "401"
+                    ]
                 ]
             ], 401);
         }
-
         return $next($request);
     }
 }

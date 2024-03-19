@@ -10,6 +10,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Gate;
 
 class DocumentTypeController extends Controller
 {
@@ -20,6 +21,8 @@ class DocumentTypeController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
+        $this->authorize('index', \App\Models\DocumentType::class);
+
         $documentTypes = DocumentType::query()
 
             ->allowedIncludes(['users'])

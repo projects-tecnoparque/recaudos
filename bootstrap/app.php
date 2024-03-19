@@ -105,16 +105,15 @@ $app->routeMiddleware([
 */
 
 $app->register(App\Providers\AppServiceProvider::class);
-$app->register(App\Providers\AuthServiceProvider::class);
+;
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\JsonApiServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
-
-$app->register(Spatie\Permission\PermissionServiceProvider::class);
-
-
 $app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't have this already
+$app->register(App\Providers\PermissionServiceProvider::class);;
+
+$app->register(App\Providers\AuthServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

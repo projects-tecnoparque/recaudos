@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\JsonApi\AuthenticateException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -36,13 +37,7 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (!$token = Auth::attempt($credentials)) {
-            return response()->json([
-                "error" => [
-                    "source" => ["pointer" => ""],
-                    "title" =>  "Unauthorized",
-                    "detail" => "Unauthorized."
-                ]
-            ], 401);
+            throw new AuthenticateException("No estas autorizado para acceder");
         }
 
         return $this->respondWithToken($token);
@@ -55,7 +50,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return UserResource::make(auth()->user());
     }
 
     /**
@@ -67,7 +62,13 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json([
+            'data' => [
+                "title" => "Successfully logout",
+                'detail' => 'Successfully logged out',
+                'status' => '200',
+            ]
+        ], 200);
     }
 
     /**
@@ -90,12 +91,12 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
-            // 'data' => [
+            'data' => [
                 'access_token' => $token,
                 'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60 * 24,
                 'user' => UserResource::make(auth()->user()),
-                'expires_in' => auth()->factory()->getTTL() * 60 * 24
-            // ]
-        ]);
+            ]
+        ], 200);
     }
 }
