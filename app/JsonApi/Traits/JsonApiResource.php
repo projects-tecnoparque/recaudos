@@ -2,7 +2,6 @@
 
 namespace App\JsonApi\Traits;
 
-use App\Http\Resources\DocumentTypeResource;
 use App\JsonApi\Document;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\MissingValue;
@@ -48,6 +47,8 @@ trait JsonApiResource
                 ->get('data');
     }
 
+
+
     public function filterAttributes(array $attributes): array
     {
         return array_filter($attributes, function($value){
@@ -72,16 +73,16 @@ trait JsonApiResource
         return [];
     }
 
+
     public static function collection($resources): AnonymousResourceCollection
     {
-        
         $collection = parent::collection($resources);
-        // dd($collection);
+
         if(request()->filled('include')){
             foreach($resources as $resource){
                 foreach($resource->getIncludes() as $include){
                     if($include->resource instanceof MissingValue){
-                        // dd($include->resource);
+
                         continue;
                     }
                     $collection->with['included'][] = $include;

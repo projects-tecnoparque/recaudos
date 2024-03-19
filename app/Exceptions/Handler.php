@@ -54,34 +54,86 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof AuthorizationException) {
-            return response()->json((['status' => 403, 'message' =>  $exception->getMessage()]), 403);
-        }
+        return $this->handleException($request, $exception);
+    }
 
-        if ($exception instanceof MethodNotAllowedHttpException) {
-            return response()->json((['status' => 405, 'message' =>  $exception->getMessage()]), 405);
-        }
-
-        if ($exception instanceof HttpException) {
-            return response()->json((['status' => $exception->getStatusCode(), 'message' => $exception->getMessage()]), $exception->getStatusCode());
-        }
-        if ($exception instanceof NotFoundHttpException) {
-            return response()->json((['status' => 404, 'message' => 'The requested resource was not found']), 404);
-        }
-        if ($exception instanceof ModelNotFoundException) {
-            return response()->json((['status' => 404, 'message' => $exception->getMessage()]), 404);
-        }
-        if ($exception instanceof QueryException) {
-            return response()->json((['status' => 500, 'message' => $exception->getMessage()]), 500);
-        }
+    public function handleException($request, Throwable $exception)
+    {
         if ($exception instanceof ValidationException) {
             return $this->invalidJson($request, $exception);
         }
-        return parent::render($request, $exception);
+        if ($exception instanceof AuthorizationException) {
+            return $this->errorResponse(
+                title: $exception->getMessage(),
+                detail:'This action is unauthorized',
+                status: 403
+            );
+        }
+
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return $this->errorResponse(
+                title: $exception->getMessage(),
+                detail: $exception->getMessage(),
+                status: 405
+            );
+        }
+
+        if ($exception instanceof NotFoundHttpException) {
+            return $this->errorResponse(
+                title: "The requested resource was not found",
+                detail: "The requested resource was not found",
+                status: 404
+            );
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            return $this->errorResponse(
+                title: $exception->getMessage(),
+                detail: $exception->getMessage(),
+                status: 404
+            );
+        }
+
+        if ($exception instanceof HttpException) {
+            return $this->errorResponse(
+                title: $exception->getMessage(),
+                detail: $exception->getMessage(),
+                status: $exception->getStatusCode()
+            );
+        }
+
+        if ($exception instanceof QueryException) {
+            return $this->errorResponse(
+                title: $exception->getMessage(),
+                detail: $exception->getMessage(),
+                status: 500
+            );
+        }
+
+        if (config('app.debug')) {
+            return parent::render($request, $exception);
+        }
+
+        return $this->errorResponse(
+            title: 'Falla inesperada. Intente luego',
+            detail: 'Falla inesperada. Intente luego',
+            status: 500
+        );
     }
 
     protected function invalidJson($request, ValidationException $exception): JsonApiValidationErrorResponse
     {
         return new JsonApiValidationErrorResponse($exception);
+    }
+
+    protected function errorResponse($title = '', $detail = '', int $status = 200): \Illuminate\Http\JsonResponse
+    {
+        return response()->json([
+            'errors' => [
+                'title' => $title,
+                'detail' => $detail,
+                'status' => (string) $status
+            ]
+        ], (int) $status);
     }
 }

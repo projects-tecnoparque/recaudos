@@ -21,6 +21,7 @@ class DocumentTypeController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $documentTypes = DocumentType::query()
+
             ->allowedIncludes(['users'])
             ->allowedFilters(['name', 'abbreviation', 'month', 'year'])
             ->allowedSorts(['name', 'abbreviation'])
