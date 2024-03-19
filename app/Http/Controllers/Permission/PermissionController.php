@@ -18,7 +18,6 @@ class PermissionController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $permissions = Permission::query()
-        ->allowedIncludes(['users', 'roles'])
         ->allowedFilters(['name'])
         ->allowedSorts(['name'])
         ->sparseFielset()
@@ -37,7 +36,6 @@ class PermissionController extends Controller
     public function show($id): JsonResource
     {
         $permission = Permission::query()
-        ->allowedIncludes(['users', 'roles'])
         ->sparseFielset()
         ->findOrFail($id);
 

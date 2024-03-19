@@ -19,8 +19,6 @@ class DocumentTypeResource extends JsonResource
         ];
     }
 
-
-
     public function getIncludes(): array
     {
         return [

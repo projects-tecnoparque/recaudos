@@ -23,6 +23,10 @@ $router->get('/version', function () use ($router) {
     return $router->app->version();
 });
 
+// $router->get('/hola', function(){
+//     return "Hola";
+// });
+
 $router->post('login', [
     'uses' => 'Auth\AuthController@login'
 ]);
@@ -32,7 +36,7 @@ $router->group(['namespace' => 'Auth', 'middleware' => 'auth'], function () use 
     $router->post('user-profile', 'AuthController@me');
 });
 
-$router->group(['middleware' => 'auth'], function () use ($router) {
+$router->group(['namespace' => 'DocumentType','middleware' => 'auth'], function () use ($router) {
     $router->get('/document-types', 'DocumentTypeController@index');
     $router->post('/document-types', 'DocumentTypeController@store');
     $router->get('/document-types/{id}', 'DocumentTypeController@show');
@@ -40,7 +44,9 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->delete('/document-types/{id}', 'DocumentTypeController@destroy');
 });
 
-$router->group(['middleware' => 'auth'], function () use ($router) {
+$router->group(['namespace' => 'Role', 'middleware' => 'auth'], function () use ($router) {
+    $router->get('/roles/{id}/relationships/permissions','RolePermissionController@index');
+    $router->get('/roles/{id}/permissions', 'RolePermissionController@show');
     $router->get('/roles', 'RoleController@index');
     $router->get('/roles/{id}', 'RoleController@show');
 });
@@ -52,20 +58,22 @@ $router->group(['namespace' => 'Permission', 'middleware' => 'auth'], function (
 
 
 $router->group(['namespace' => 'User', 'middleware' => 'auth'], function () use ($router) {
+
     $router->get('/users/{id}/relationships/document-type','UserDocumentTypeController@index');
+
     $router->get('/users/{id}/document-type', 'UserDocumentTypeController@show');
     $router->get('/users/{id}/relationships/roles','UserRoleController@index');
     $router->get('/users/{id}/roles', 'UserRoleController@show');
+    $router->get('/users/{id}/relationships/permissions','UserPermissionController@index');
+    $router->get('/users/{id}/permissions', 'UserPermissionController@show');
     $router->get('/users', 'UserController@index');
     $router->post('/users', 'UserController@store');
     $router->get('/users/{id}', 'UserController@show');
     $router->put('/users/{id}', 'UserController@update');
     $router->delete('/users/{id}', 'UserController@destroy');
+
+    $router->patch('/users/{id}/relationships/document-type','UserDocumentTypeController@update');
 });
 
-$router->group(['middleware' => 'auth'], function () use ($router) {
-    $router->get('/customers', 'CustomerController@index');
-    $router->get('/customers/{id}', 'CustomerController@show');
-});
 
 

@@ -20,7 +20,7 @@ class RoleResource extends JsonResource
 
     public function getRelationshipLinks(): array
     {
-        return ['users', 'permissions'];
+        return ['permissions'];
     }
 
     public function getIncludes(): array

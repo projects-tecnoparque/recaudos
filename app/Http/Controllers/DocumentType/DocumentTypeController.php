@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\DocumentType;
 
-use App\Http\Resources\DocumentTypeCollection;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\DocumentTypeResource;
 use App\Models\DocumentType;
 use Illuminate\Http\Request;

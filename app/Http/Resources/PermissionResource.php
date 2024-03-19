@@ -18,11 +18,6 @@ class PermissionResource extends JsonResource
         ];
     }
 
-    public function getRelationshipLinks(): array
-    {
-        return ['users', 'roles'];
-    }
-
     public function getIncludes(): array
     {
         return [
