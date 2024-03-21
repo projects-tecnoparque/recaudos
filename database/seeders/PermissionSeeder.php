@@ -26,7 +26,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'leer tipos documentos'])
         ->syncRoles([
             $roleAdmin,
-            $roleRecaudador
+            // $roleRecaudador
         ]);
 
         Permission::create(['name' => 'Leer Usuarios'])

@@ -85,10 +85,13 @@ config(['app.faker_locale' => 'es_ES']);
 // ]);
 
 $app->routeMiddleware([
+    'signature' => App\Http\Middleware\SignatureMiddleware::class,
+    'throttle' => App\Http\Middleware\ThrottleRequests::class,
     'auth' => App\Http\Middleware\Authenticate::class,
     'permission' => App\Http\Middleware\PermissionMiddleware::class, // cloned from Spatie\Permission\Middleware
     'role'       => App\Http\Middleware\RoleMiddleware::class,  // cloned from Spatie\Permission\Middleware
-    'header-json' => App\Http\Middleware\ValidateJsonApiHeaders::class
+    'header-json' => App\Http\Middleware\ValidateJsonApiHeaders::class,
+
 ]);
 
 
@@ -128,7 +131,11 @@ $app->register(App\Providers\AuthServiceProvider::class);
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
-    'middleware' => 'header-json'
+    'middleware' => [
+        'header-json',
+        'signature:X-Application-Name',
+        'throttle:10,1',
+    ]
 ], function ($router) {
     require __DIR__.'/../routes/web.php';
 });

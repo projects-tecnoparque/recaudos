@@ -66,7 +66,7 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof AuthorizationException) {
             return $this->errorResponse(
-                title: "This action is unauthorized",
+                title: "Unauthorized",
                 detail: $exception->getMessage(),
                 status: 403
             );
@@ -74,7 +74,7 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof MethodNotAllowedHttpException) {
             return $this->errorResponse(
-                title: "Method Not Allowed Http Exception",
+                title: "Method Not Allowed",
                 detail: $exception->getMessage(),
                 status: 405
             );
@@ -116,7 +116,7 @@ class Handler extends ExceptionHandler
         }
 
         return $this->errorResponse(
-            title: 'Falla inesperada. Intente luego',
+            title: 'Falla inesperada',
             detail: 'Falla inesperada. Intente luego',
             status: 500
         );

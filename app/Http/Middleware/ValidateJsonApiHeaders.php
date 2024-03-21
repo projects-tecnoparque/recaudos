@@ -7,8 +7,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ValidateJsonApiHeaders
 {
-
-
     /**
      * Handle an incoming request.
      *
@@ -28,8 +26,11 @@ class ValidateJsonApiHeaders
                 throw new HttpException(415, __('Unsupported Media Type'));
             }
         }
-        return $next($request)->withHeaders([
-            'content-type' => 'application/vnd.api+json'
-        ]);
+        $response = $next($request);
+
+        $response->headers->set(
+            'content-type', 'application/vnd.api+json'
+        );
+        return $response;
     }
 }
