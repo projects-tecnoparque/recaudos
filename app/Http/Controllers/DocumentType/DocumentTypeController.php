@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\DocumentType;
 
+use App\Transformers\DocumentTypeTrasformer;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DocumentTypeResource;
 use App\Models\DocumentType;
@@ -19,7 +20,7 @@ class DocumentTypeController extends Controller
      *
      * @return Response
      */
-    public function index(): AnonymousResourceCollection
+    public function index()
     {
         $this->authorize('index', \App\Models\DocumentType::class);
 

@@ -112,11 +112,17 @@ $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\JsonApiServiceProvider::class);
-$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
-$app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't have this already
+$app->register(
+    Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class
+);
+$app->register(Spatie\Fractal\FractalServiceProvider::class);
+
 $app->register(App\Providers\PermissionServiceProvider::class);;
 
 $app->register(App\Providers\AuthServiceProvider::class);
+
+$app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't have this already
+
 
 /*
 |--------------------------------------------------------------------------

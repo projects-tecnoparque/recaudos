@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Transformers\DocumentTypeTrasformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,6 +22,8 @@ class DocumentType extends Model
     ];
 
     public $resourceType = 'document-types';
+
+    public $transformer = DocumentTypeTrasformer::class;
 
     public function users(): HasMany
     {
